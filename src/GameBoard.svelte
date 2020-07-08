@@ -19,9 +19,9 @@
 </style>
 
 <div class="board">
-    {#each gameRows as circleRow}
+    {#each gameRows as circleRow, index (index)}
         <div class="row">
-            {#each circleRow as circleInfo}
+            {#each circleRow as circleInfo (circleInfo.key)}
                 <Circle 
                 color={circleInfo.color} 
                 isTarget={circleInfo.isTarget}

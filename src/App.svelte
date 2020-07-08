@@ -18,9 +18,8 @@
 	function startTimer(){
 		timeLeft = 5;
 		gameInterval = setInterval(() => {
-
 			if(timeLeft > 1){
-				timeLeft = timeLeft - 1;
+				timeLeft = timeLeft - 1;				
 			}else {
 				gameOver();
 			}
@@ -59,39 +58,26 @@
 	function setUpRows() {
 		let baseColor = Math.floor(Math.random() * 256);
 		let restColors = Math.floor(Math.random() * 96) + 80;
-		let red = restColors;
-		let green = restColors;
-		let blue = restColors;
+		let normalRGB = [restColors, restColors, restColors];
 		let offset = Math.floor(Math.random() * 2) === 0 ? -20 : 20;
 		let randRGB = Math.floor(Math.random() * 3);
 		let normalColor = '';
 		let targetColor = '';
 
-		if (randRGB === 0) {
-			red = baseColor;
-			normalColor = `rgb(${red}, ${blue}, ${green})`;
-			blue += offset;
-			green += offset;
-		} else if (randRGB === 1) {
-			green = baseColor;
-			normalColor = `rgb(${red}, ${blue}, ${green})`;
-			red += offset;
-			blue += offset;
-		} else {
-			blue = baseColor;
-			normalColor = `rgb(${red}, ${blue}, ${green})`;
-			red += offset;
-			green += offset;
-    	}
+		normalRGB[randRGB] = baseColor;
+		normalColor = `rgb(${normalRGB[0]}, ${normalRGB[1]}, ${normalRGB[2]})`
+		let targetRGB = normalRGB.map((color, index) => {
+			return index === randRGB ? color : color + offset;
+		})
 
-		targetColor = `rgb(${red}, ${blue}, ${green})`;
+		targetColor = `rgb(${targetRGB[0]}, ${targetRGB[1]}, ${targetRGB[2]})`;
 
 		let rows = [];
 		let newTargetRow = Math.floor(Math.random() * 3);
 		let newTargetColumn = Math.floor(Math.random() * 3);
 		
 		for (let i = 0; i < 3; i++) {
-		let row = [];
+			let row = [];
 		for (let j = 0; j < 3; j++) {
 			let color = normalColor;
 			let isTarget = false;
