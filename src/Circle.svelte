@@ -1,7 +1,13 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+
     export let color;
     export let isTarget;
-    export let circleClicked;
+
+    function handleClick() {
+        dispatch('clicked', isTarget);
+    }
     
 </script>
 
@@ -19,6 +25,6 @@
 <div
       class='circle'
       style="background-color: {color}"
-      on:click={circleClicked(isTarget)}
+      on:click={handleClick}
     ></div>
 

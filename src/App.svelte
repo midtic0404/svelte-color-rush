@@ -1,5 +1,6 @@
 <script>
-	import Circle from "./Circle.svelte";
+	
+	import GameBoard from "./GameBoard.svelte";
 
 	let gameRows = [];
 	let isPlaying = false;
@@ -32,7 +33,8 @@
 	};
 
 	function circleClicked(isTarget) {
-		if (isTarget) {
+		
+		if (isTarget.detail) {
 			score = score + 1;
 			resetTimer();
 			setUpRows();
@@ -66,49 +68,49 @@
 		let targetColor = '';
 
 		if (randRGB === 0) {
-		red = baseColor;
-		normalColor = `rgb(${red}, ${blue}, ${green})`;
-		blue += offset;
-		green += offset;
+			red = baseColor;
+			normalColor = `rgb(${red}, ${blue}, ${green})`;
+			blue += offset;
+			green += offset;
 		} else if (randRGB === 1) {
-		green = baseColor;
-		normalColor = `rgb(${red}, ${blue}, ${green})`;
-		red += offset;
-		blue += offset;
+			green = baseColor;
+			normalColor = `rgb(${red}, ${blue}, ${green})`;
+			red += offset;
+			blue += offset;
 		} else {
-		blue = baseColor;
-		normalColor = `rgb(${red}, ${blue}, ${green})`;
-		red += offset;
-		green += offset;
-    }
+			blue = baseColor;
+			normalColor = `rgb(${red}, ${blue}, ${green})`;
+			red += offset;
+			green += offset;
+    	}
 
-    targetColor = `rgb(${red}, ${blue}, ${green})`;
+		targetColor = `rgb(${red}, ${blue}, ${green})`;
 
-    let rows = [];
-    let newTargetRow = Math.floor(Math.random() * 3);
-	let newTargetColumn = Math.floor(Math.random() * 3);
-	
-    for (let i = 0; i < 3; i++) {
-      let row = [];
-      for (let j = 0; j < 3; j++) {
-        let color = normalColor;
-        let isTarget = false;
-        if (i === newTargetRow && j === newTargetColumn) {
-          color = targetColor;
-          isTarget = true;
-        }
-        row.push(
-			{
-				key: `${i}, ${j}`,
-				color: color,
-				isTarget: isTarget
+		let rows = [];
+		let newTargetRow = Math.floor(Math.random() * 3);
+		let newTargetColumn = Math.floor(Math.random() * 3);
+		
+		for (let i = 0; i < 3; i++) {
+		let row = [];
+		for (let j = 0; j < 3; j++) {
+			let color = normalColor;
+			let isTarget = false;
+			if (i === newTargetRow && j === newTargetColumn) {
+				color = targetColor;
+				isTarget = true;
 			}
-        );
-      }
-      rows.push(row);
-	}
-	gameRows = rows;
-  };
+			row.push(
+				{
+					key: `${i}, ${j}`,
+					color: color,
+					isTarget: isTarget
+				}
+			);
+		}
+		rows.push(row);
+		}
+		gameRows = rows;
+	};
 
 </script>
 
@@ -135,19 +137,6 @@
 		font-size: 3rem;
 	}
 
-	.board {
-		width: 400px;
-		margin-bottom: 2rem;
-	}
-
-	.row {
-		display: flex;
-		width: 100%;
-		justify-content: space-evenly;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-	}
-
 	.score{
 		font-size: 60px;
 		margin: 0;
@@ -169,18 +158,9 @@
 <main>
 	{#if isPlaying}
 		<h1 class='count-down'>{timeLeft}</h1>
-		<div class="board">
-			{#each gameRows as circleRow}
-				<div class="row">
-					{#each circleRow as circleInfo}
-						<Circle 
-						color={circleInfo.color} 
-						isTarget={circleInfo.isTarget}
-						circleClicked={circleClicked}/>
-					{/each}
-				</div>
-			{/each}
-		</div>
+		<GameBoard 
+		gameRows={gameRows}
+		on:clicked={circleClicked}/>
 	{/if}
 	<h1 class='score'>Score: {score}</h1>
 	{#if !isPlaying}
